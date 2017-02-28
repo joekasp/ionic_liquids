@@ -7,7 +7,11 @@ from rdkit.Chem import AllChem
 from rdkit.Chem import Descriptors
 from rdkit.ML.Descriptors.MoleculeDescriptors import MolecularDescriptorCalculator as Calculator
 
-#molecular descriptors 
+#Hard coded for 1-butyl-3-methylimidazolium methanesulfonate
+
+
+
+#molecular descriptors such as the number of atoms
 
 
 
