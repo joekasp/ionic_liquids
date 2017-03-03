@@ -31,7 +31,7 @@ description = "ilest: a tool for ionic liquids machine learning"
 long_description = """
 """
 
-NAME = "ilest"
+NAME = "ILest"
 MAINTAINER = "J. Kasper, S. Floris, H. Liu, M. Mao"
 MAINTAINER_EMAIL = "jkasper2@uw.edu, sdf94@uw.edu, hbliu@uw.edu, maomoke@uw.edu"
 DESCRIPTION = description
@@ -40,7 +40,7 @@ URL = "http://github.com/joekasp/ionic_liquids"
 DOWNLOAD_URL = ""
 LICENSE = "MIT"
 AUTHOR = "J. Kasper, S. Floris, H. Liu, M. Mao"
-AUTHOR_EMAIL = "jkasper2@uw.edu, sdf94@uw.du, hbliu@uw.edu, maomoke@uw.edu"
+AUTHOR_EMAIL = "jkasper2@uw.edu, sdf94@uw.edu, hbliu@uw.edu, maomoke@uw.edu"
 PLATFORMS = "OS Independent"
 MAJOR = _version_major
 MINOR = _version_minor
