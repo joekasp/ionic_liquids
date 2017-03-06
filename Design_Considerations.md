@@ -1,7 +1,6 @@
 # Main Idea
 The main idea of this project is to design a machine learning framework to take some easily-measured properties of the ionic liquid to predict some non-trivial properties.
 
-
 # Work flow
 
 #### 1. Date collection and cleaning
