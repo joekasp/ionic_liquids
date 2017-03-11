@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
 
+def model_types():
+    models=['MLP Regressor','MLP Classifier','LASSO','SVR']
+    return models
+
 def scatter_plot(X,Y):
     """
     Draws a scatter plot of data
@@ -17,3 +21,10 @@ def scatter_plot(X,Y):
     """
     pass
 
+def train_model(model,save=True):
+    print("training model is ",model)
+    
+    
+def predict_model():
+    print("prediction")
+    
