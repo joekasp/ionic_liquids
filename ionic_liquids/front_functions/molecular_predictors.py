@@ -8,11 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 from rdkit.ML.Descriptors.MoleculeDescriptors import MolecularDescriptorCalculator as Calculator
 
-def molecular_descriptors(DataFrame):
-	#Data Cleaning
-	data = pd.read_excel("inputdata.xlsx")
-	data['EC_value'], data['EC_error'] = zip(*data['ELE_COD'].map(lambda x: x.split('±')))
-
+def molecular_descriptors(data):
 	#Setting up for molecular descriptors
 	n = data.shape[0]
 	list_of_descriptors = ['NumHeteroatoms','ExactMolWt','NOCount','NumHDonors','RingCount','NumAromaticRings','NumSaturatedRings','NumAliphaticRings']

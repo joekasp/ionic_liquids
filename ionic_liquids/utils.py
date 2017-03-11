@@ -40,7 +40,7 @@ def save_model(obj,model_type,filename='default'):
         items.append(obj.intercept_)
         items.append(obj.sample_weight_)
     else:
-        Raise ValueError('Invalid model type!')
+        raise ValueError('Invalid model type!')
 
     if (filename == 'default'):
         filename = 'model' + model_type + '.txt'
@@ -65,6 +65,6 @@ def read_model(filename,model_type):
     elif (model_type == 'svr'):
         obj = SVR
     else:
-        Raise ValueError('Invalid model type!')    
+        raise ValueError('Invalid model type!')
     return obj
 
