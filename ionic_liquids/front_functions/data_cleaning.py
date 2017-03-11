@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-def data_cleaning():
+def data_cleaning(dataframe):
 
 	#Data Cleaning
 	data = pd.read_excel("inputdata.xlsx")

@@ -11,7 +11,7 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV
 
-def MLP_Classifier():
+def MLP_Classifier(dataframe):
 	#MLPClassifier
 	alphas = np.array([5,2,5,1.5,1,0.1,0.01,0.001,0.0001,0])
 	mlp_class = MLPClassifier(hidden_layer_sizes=(100,), activation='relu', solver='adam', alpha=0.0001, max_iter=5000, random_state=None,learning_rate_init=0.01)
