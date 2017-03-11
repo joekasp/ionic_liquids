@@ -15,7 +15,7 @@ def molecular_descriptors(DataFrame):
 
 	#Setting up for molecular descriptors
 	n = data.shape[0]
-	list_of_descriptors = ['NumHeteroatoms','MolWt','ExactMolWt','NOCount','NumHDonors','RingCount','NumAromaticRings','NumSaturatedRings','NumAliphaticRings']
+	list_of_descriptors = ['NumHeteroatoms','ExactMolWt','NOCount','NumHDonors','RingCount','NumAromaticRings','NumSaturatedRings','NumAliphaticRings']
 	calc = Calculator(list_of_descriptors)
 	D = len(list_of_descriptors)
 	d = len(list_of_descriptors)*2 + 4
@@ -32,7 +32,7 @@ def molecular_descriptors(DataFrame):
     	X[i][:D]    = calc.CalcDescriptors(A)
     	X[i][D:2*D] = calc.CalcDescriptors(B)
 
-	new_data = pd.DataFrame(X,columns=['NUM','NumHeteroatoms_A','MolWt_A','ExactMolWt_A','NOCount_A','NumHDonors_A','RingCount_A','NumAromaticRings_A','NumSaturatedRings_A','NumAliphaticRings_A','NumHeteroatoms_B','MolWt_B','ExactMolWt_B','NOCount_B','NumHDonors_B','RingCount_B','NumAromaticRings_B','NumSaturatedRings_B','NumAliphaticRings_B','T','P','MOLFRC_A'])
+	new_data = pd.DataFrame(X,columns=['NUM','NumHeteroatoms_A','MolWt_A','NOCount_A','NumHDonors_A','RingCount_A','NumAromaticRings_A','NumSaturatedRings_A','NumAliphaticRings_A','NumHeteroatoms_B','MolWt_B','NOCount_B','NumHDonors_B','RingCount_B','NumAromaticRings_B','NumSaturatedRings_B','NumAliphaticRings_B','T','P','MOLFRC_A'])
 
 	Y = data['EC_value']
 
