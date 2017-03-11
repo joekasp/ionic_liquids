@@ -1,9 +1,26 @@
 import numpy as np
 import pandas as pd
+
+import utils
+
+from front_functions import * 
 from utils import * 
 from methods import lasso
 
 filename = 'datasets/inputdata.xlsx'
+
+def read_model(filename,model_type):
+    if (model_type == 'lasso'):
+        obj = Lasso
+    elif (model_type == 'mlp_reg'):
+        obj = MLPRegressor
+    elif (model_type == 'mlp_clas'):
+        obj = MLPClassifier
+    elif (model_type == 'svr'):
+        obj = SVR
+    else:
+        raise ValueError('Invalid model type!')
+    return obj
 
 #get X matrix and response vector y (need a function for this) 
 df = read_data(filename) 
@@ -17,5 +34,8 @@ obj = lasso.do_lasso(X,y)
 
 #save model to file
 save_model(obj,model_type='lasso')
+
+#plot
+plot = error_plots()
 
 

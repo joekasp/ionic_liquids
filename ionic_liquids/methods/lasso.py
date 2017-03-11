@@ -1,7 +1,5 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import Lasso
 
@@ -28,5 +26,4 @@ def do_lasso(X,y):
     lasso.fit(X,y)
 	
     return lasso
-
 
