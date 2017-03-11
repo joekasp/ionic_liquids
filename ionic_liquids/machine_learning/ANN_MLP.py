@@ -16,9 +16,8 @@ class regressor():
     
     
 def MLP(X,Y):
-    Y_error = np.genfromtxt('../datasets/Selective_descriptors_error')
     X = StandardScaler().fit_transform(X)
-    X_train,X_test,Y_train,Y_test,e_train,e_test = train_test_split(X,Y,Y_error,test_size=0.10,random_state=1010)
+    X_train,X_test,Y_train,Y_test= train_test_split(X,Y,test_size=0.10,random_state=1010)
 
     n_train = X_train.shape[0]
     n_test = X_test.shape[0]
@@ -40,7 +39,7 @@ def MLP(X,Y):
     m = int(n_train/mb)
     batch = np.arange(m)
     lr = 0.00020
-    EP =200
+    EP =20000
     y = np.zeros((mb,1))
     yh = np.zeros((n_train,1))
     yh2 = np.zeros((n_test,1))
