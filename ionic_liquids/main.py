@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from utils import * 
-import methods
+from methods import lasso
 
 filename = 'datasets/inputdata.xlsx'
 
@@ -12,10 +12,10 @@ X,y = molecular_descriptors(df)
 #do machine_learning call
 #MLP_Regr = MLP_regressor(molecular_descriptors, conductivity)
 #MLP_class = MLP_classifier(molecular_descriptors, conductivity)
-Lasso = Lasso(molecular_descriptors, conductivity)
+obj = lasso.do_lasso(X,y)
 #SVR = SVR(molecular_descriptors, conductivity)
 
 #save model to file
-utils.save_model(obj,model_type='lasso')
+save_model(obj,model_type='lasso')
 
 

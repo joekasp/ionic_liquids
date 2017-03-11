@@ -65,7 +65,7 @@ def read_data(filename):
         raise ValueError('Filetype not supported')
 
     #clean the data if necessary
-	#data['EC_value'], data['EC_error'] = zip(*data['ELE_COD'].map(lambda x: x.split('±')))
+    df['EC_value'], df['EC_error'] = zip(*df['ELE_COD'].map(lambda x: x.split('±')))
 
     return df
 
@@ -105,12 +105,12 @@ def save_model(obj,model_type,filename='default'):
         raise ValueError('Invalid model type!')
 
     if (filename == 'default'):
-        filename = 'model' + model_type + '.txt'
+        filename = 'model_' + model_type + '.txt'
 
     f = open(filename,'w')
     f.write(model_type + '\n')
     for item in items:
-        f.write(item)
+        f.write(str(item))
         f.write('\n')
     f.close()
  
