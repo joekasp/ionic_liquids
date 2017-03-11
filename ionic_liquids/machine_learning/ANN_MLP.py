@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn.neural_network import MLPRegressor as MLP
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error as MSE
 from sklearn.preprocessing import StandardScaler
@@ -16,9 +15,7 @@ class regressor():
         return np.tanh(X.dot(self.weight1)).dot(self.weight2)
     
     
-def MLP():
-    X = np.genfromtxt('../datasets/Selective_descriptors_X')
-    Y = np.genfromtxt('../datasets/Selective_descriptors_Y').reshape((X.shape[0],1))
+def MLP(X,Y):
     Y_error = np.genfromtxt('../datasets/Selective_descriptors_error')
     X = StandardScaler().fit_transform(X)
     X_train,X_test,Y_train,Y_test,e_train,e_test = train_test_split(X,Y,Y_error,test_size=0.10,random_state=1010)
