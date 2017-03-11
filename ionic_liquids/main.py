@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
-from front_functions import * 
 import utils
+
+from front_functions import * 
 
 
 #get X matrix and response vector y (need a function for this) 
@@ -18,5 +19,8 @@ SVR = SVR(molecular_descriptors, conductivity)
 
 #save model to file
 utils.save_model(obj,model_type='mlp_reg')
+
+#plot
+plot = error_plots()
 
 

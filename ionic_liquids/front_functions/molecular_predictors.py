@@ -13,8 +13,8 @@ def molecular_descriptors(DataFrame):
 	#Setting up for molecular descriptors
 	n = data.shape[0]
 	list_of_descriptors = ['NumHeteroatoms', 'ExactMolWt', 'NOCount', 'NumHDonors',
-						    'RingCount', 'NumAromaticRings', 'NumSaturatedRings',
-						    'NumAliphaticRings']
+						'RingCount', 'NumAromaticRings', 'NumSaturatedRings',
+						'NumAliphaticRings']
 	calc = Calculator(list_of_descriptors)
 	D = len(list_of_descriptors)
 	d = len(list_of_descriptors)*2 + 4
