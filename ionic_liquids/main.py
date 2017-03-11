@@ -1,16 +1,26 @@
 import numpy as np
 import pandas as pd
-<<<<<<< HEAD
+
 import utils
 
 from front_functions import * 
-
-=======
 from utils import * 
 import methods
 
 filename = 'datasets/inputdata.xlsx'
->>>>>>> fa6a18065105f458292d126a554308418dff6126
+
+def read_model(filename,model_type):
+    if (model_type == 'lasso'):
+        obj = Lasso
+    elif (model_type == 'mlp_reg'):
+        obj = MLPRegressor
+    elif (model_type == 'mlp_clas'):
+        obj = MLPClassifier
+    elif (model_type == 'svr'):
+        obj = SVR
+    else:
+        raise ValueError('Invalid model type!')
+    return obj
 
 #get X matrix and response vector y (need a function for this) 
 df = read_data(filename) 
