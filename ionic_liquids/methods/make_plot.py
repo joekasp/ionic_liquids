@@ -12,8 +12,8 @@ def make_plot(title, y_test):
 		ydr = Range1d(start=start, end=end)
 		circles_source = ColumnDataSource(y_test.values.astype(np.float), object.predict(X_test))
     	plot = Plot(
-        x_range=xdr, y_range=ydr, data_sources=circles_source, title=title, 
-		width=400, height=400, border_fill='white', background_fill='#e9e0db')
+        	x_range=xdr, y_range=ydr, data_sources=circles_source, title=title, 
+			width=400, height=400, border_fill='white', background_fill='#e9e0db')
 		plot.title.text = title
     	
     	circle = Circle(

@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 
+
 def error_plot(object,X_test,y_test):
 		plot = plt.figure(figsize=(4,4))
 		plot.scatter(y_test.values.astype(np.float),object.predict(X_test))
