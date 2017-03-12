@@ -12,6 +12,31 @@ from rdkit.Chem import AllChem, Descriptors
 from sklearn.model_selection import train_test_split
 from rdkit.ML.Descriptors.MoleculeDescriptors import MolecularDescriptorCalculator as Calculator
 
+from methods import methods
+
+def errors(y_test,y_prediction):
+		difference = y_prediction - y_test
+		return difference
+
+
+def train_model(model,data_file,save=True):
+    df = read_data(data_file)
+    X,y = molecular_descriptors(df)
+    print("training model is ",model)
+    if (model == 'LASSO'):
+        obj = lasso.do_lasso(X,y)
+    elif (model == 'MLP Regressor'):
+        pass
+    elif (model == 'MLP Classifier'):
+        pass
+    elif (model == 'SVR'):
+        pass
+    else:
+        raise ValueError('Invalid model type!') 
+
+    return obj, X, y
+
+
 def molecular_descriptors(data):
 	#Setting up for molecular descriptors
 	n = data.shape[0]

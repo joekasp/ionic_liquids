@@ -1,30 +1,16 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
-import utils
-
-from front_functions import * 
-from utils import * 
+import utils 
 from methods import lasso
+from visualization import core
 
 filename = 'datasets/inputdata.xlsx'
 
-def read_model(filename,model_type):
-    if (model_type == 'lasso'):
-        obj = Lasso
-    elif (model_type == 'mlp_reg'):
-        obj = MLPRegressor
-    elif (model_type == 'mlp_clas'):
-        obj = MLPClassifier
-    elif (model_type == 'svr'):
-        obj = SVR
-    else:
-        raise ValueError('Invalid model type!')
-    return obj
-
 #get X matrix and response vector y (need a function for this) 
-df = read_data(filename) 
-X,y = molecular_descriptors(df)
+df = utils.read_data(filename) 
+X,y = utils.molecular_descriptors(df)
 
 #do machine_learning call
 #MLP_Regr = MLP_regressor(molecular_descriptors, conductivity)
@@ -33,9 +19,9 @@ obj = lasso.do_lasso(X,y)
 #SVR = SVR(molecular_descriptors, conductivity)
 
 #save model to file
-save_model(obj,model_type='lasso')
+#utils.save_model(obj,model_type='lasso')
 
 #plot
-plot = error_plots()
-
+my_plot = core.parity_plot(y,obj.predict(X))
+plt.show(my_plot)
 
