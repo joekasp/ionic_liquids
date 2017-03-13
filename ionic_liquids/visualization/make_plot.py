@@ -21,7 +21,7 @@ def parity_plot(y_pred,y_act):
     """
 
     fig = plt.figure(figsize=(4,4))
-    plt.scatter(y_act,y_pred)
+    plt.scatter(y_act,y_pred, alpha=0.5)
     plt.plot([y_act.min(),y_act.max()],[y_act.min(),y_act.max()],lw=4,'r')
     plt.xlabel('Actual')
     plt.ylabel('Predicted')

@@ -24,6 +24,8 @@ obj = lasso.do_lasso(X,y)
 #utils.save_model(obj,model_type='lasso')
 
 #plot
-my_plot = core.parity_plot(y,obj.predict(X))
+prediction_plot = core.parity_plot(y,obj.predict(X))
+
+
 plt.show(my_plot)
 

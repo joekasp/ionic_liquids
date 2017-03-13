@@ -48,7 +48,7 @@ def do_MLP_regressor(X,y):
 	grid_search: objective, the regressor objective 
 	'''
 
-	alphas = np.array([5,2,5,1.5,1,0.1,0.01,0.001,0.0001,0])
+    alphas = np.array([1,0.1,0.01,0.001,0.0001])
 	mlp_regr = MLPRegressor(hidden_layer_sizes=(100,), activation='relu',
 	    solver='adam', alpha=0.0001, max_iter=5000, random_state=None,learning_rate_init=0.01)
 	grid_search = GridSearchCV(mlp_regr, param_grid=dict(alpha=alphas))
@@ -71,8 +71,7 @@ def do_MLP_classifier(X,y):
 	------
 	grid_search: objective, the regressor objective 
 	'''
-
-	alphas = np.array([5,2,5,1.5,1,0.1,0.01,0.001,0.0001,0])
+    alphas = np.array([1,0.1,0.01,0.001,0.0001])    
 	mlp_class = MLPClassifier(hidden_layer_sizes=(100,), activation='relu', 
 	    solver='adam', alpha=0.0001, max_iter=5000, random_state=None,learning_rate_init=0.01)
 	grid_search = GridSearchCV(mlp_class, param_grid=dict(alpha=alphas))
