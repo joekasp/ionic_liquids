@@ -97,7 +97,7 @@ def do_lasso(X,y):
 
 	"""
 
-	alphas = np.array([5,4,3,2,1,0.1,0.01,0.001,0.0001])
+	alphas = np.array([0.1,0.01,0.001,0.0001])
 	lasso = Lasso(alpha=0.001, fit_intercept=True, normalize=False, precompute=False,
 	    copy_X=True, max_iter=10000, tol=0.001, positive=False, random_state=None, selection='cyclic')
 	#gs = GridSearchCV(lasso, param_grid=dict(alpha=alphas))
