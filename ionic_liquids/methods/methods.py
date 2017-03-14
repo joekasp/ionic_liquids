@@ -59,7 +59,6 @@ def do_MLP_regressor(X,y):
 
     return mlp_regr
 
-
 def do_MLP_classifier(X,y):
     """
     Call the MLP Classifier, 
