@@ -55,3 +55,26 @@ def train_test_error(e_train,e_test,model_params):
     return fig
 
 
+def mol_fraction_plot(x_vals,y_vals):
+    """
+    Creates a plot of predicted electric conductivity as a
+    function of the mole fractions.
+
+    Input
+    -----
+    x_vals : numpy vector x-axis (mole fractions)
+    y_vals : numpy vector y-axis (predicted conductivities)
+
+    Returns
+    ------
+    fig : matplotlib figure
+
+    """
+    fig = plt.figure(figsize=FIG_SIZE)
+    plt.scatter(x_vals,y_vals)
+    plt.xlabel('Mole Fraction A')
+    plt.ylabel('Electrical Conductivity')
+
+    return fig
+
+

@@ -61,6 +61,38 @@ def train_model(model,data_file,test_percent,save=True):
     return obj, X, y
 
 
+def predict_model(A_smile,B_smile,obj,t,p):
+    """
+    Generates the predicted model data for a mixture
+    of compounds A and B at temperature t and pressure p.
+
+    Inputs
+    -----
+    A_smile : SMILES string for compound A
+    B_smile : SMILES string for compound B
+    obj : model object
+    t : float of temperature
+    p : float of pressure
+
+    Returns
+    ------
+    x_conc : concentration (x-values)
+    y_pred : predicted conductivity (y_values)
+
+    """
+    N = 100 #number of points
+
+    x_conc = np.linspace(0,1,N+1)
+    y_pred = np.empty(N+1)
+    for i in range(len(x_conc)):
+        my_df = pd.DataFrame({'A':A_smile,'B':B_smile,'MOLFRC_A':x_conc[i],'P':p,'T':t,'EC_value':0},index=[0])
+        X,trash = molecular_descriptors(my_df) 
+        y_pred[i] = obj.predict(X)
+
+    return x_conc,y_pred
+   
+
+
 def molecular_descriptors(data):
     """
     Use RDKit to prepare the molecular descriptor

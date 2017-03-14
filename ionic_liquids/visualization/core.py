@@ -58,8 +58,5 @@ def scatter_plot(X,Y):
     """
     pass
 
-
-def predict_model():
-    print("prediction")
    
  

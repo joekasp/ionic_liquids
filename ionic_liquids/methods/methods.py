@@ -72,16 +72,20 @@ def do_MLP_classifier(X,y):
     
     Returns
     ------
-    grid_search: objective, the regressor objective 
+    mlp_class: sklearn object with model information 
+
     """
     
     alphas = np.array([5,2,5,1.5,1,0.1,0.01,0.001,0.0001,0])
     mlp_class = MLPClassifier(hidden_layer_sizes=(100,), activation='relu', 
         solver='adam', alpha=0.0001, max_iter=5000, random_state=None,learning_rate_init=0.01)
     grid_search = GridSearchCV(mlp_class, param_grid=dict(alpha=alphas))
-    grid_search.fit(X_train,y_train)
-    
-    return grid_search
+    grid_search.fit(X,y)
+
+    mlp_class.alpha_ = grid_search.best_params_['alpha']    
+    mlp_class.fit(X,y)
+
+    return mlp_class
 
 
 def do_lasso(X,y): 
