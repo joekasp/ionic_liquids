@@ -43,6 +43,7 @@ def train_model(model,data_file,test_percent,save=True):
     """    
     df = read_data(data_file)
     X,y = molecular_descriptors(df)
+    X, X_mean, X_std = normalization(X, mean = None, std = None)
     X_train, X_test, y_train, y_test  = train_test_split(X,y,test_size=(test_percent/100))
     
     model = model.replace(' ','_')
@@ -58,8 +59,16 @@ def train_model(model,data_file,test_percent,save=True):
     else:
         raise ValueError('Invalid model type!') 
     
-    return obj, X, y
+    return obj, X, y, X_mean, X_std
 
+def normalization(data,mean,std):
+    if mean == None:
+        mean = np.mean(data)
+    if std == None:
+        std = np.std(data)
+    data = (data - mean) / std
+    return data, mean, std
+    
 
 def predict_model(A_smile,B_smile,obj,t,p):
     """
@@ -86,8 +95,12 @@ def predict_model(A_smile,B_smile,obj,t,p):
     y_pred = np.empty(N+1)
     for i in range(len(x_conc)):
         my_df = pd.DataFrame({'A':A_smile,'B':B_smile,'MOLFRC_A':x_conc[i],'P':p,'T':t,'EC_value':0},index=[0])
-        X,trash = molecular_descriptors(my_df) 
+        
+        X,trash = molecular_descriptors(my_df)
+        #X,mean,std = normalization(X,mean = obj.mean,)
+        print(X)
         y_pred[i] = obj.predict(X)
+        
 
     return x_conc,y_pred
    
@@ -124,7 +137,7 @@ def molecular_descriptors(data):
     X[:,-3] = data['T']
     X[:,-2] = data['P']
     X[:,-1] = data['MOLFRC_A']
-    
+    print(X)
     for i in range(n):
         A = Chem.MolFromSmiles(data['A'][i])
         B = Chem.MolFromSmiles(data['B'][i])
@@ -144,6 +157,7 @@ def molecular_descriptors(data):
         'T', 'P', 'MOLFRC_A'])
     # Normalize all the input feature
     norm_X = StandardScaler().fit_transform(prenorm_X)
+    print(norm_X)
 
     return norm_X, Y
 
