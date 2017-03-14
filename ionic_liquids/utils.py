@@ -145,13 +145,15 @@ def read_data(filename):
     return df
 
 
-def save_model(obj,dirname='default'):
+def save_model(obj,X=None,y=None,dirname='default'):
     """
     Save the trained regressor model to the file
     
     Input
     ------
-    obj: object
+    obj: model object
+    X : Predictor matrix
+    y : Response vector
     dirname : the directory to save contents  
  
     Returns
@@ -159,7 +161,8 @@ def save_model(obj,dirname='default'):
     None
     """
     if (dirname == 'default'):
-        dirname = 'model'+str(datetime.now())
+        timestamp = str(datetime.now())[:19]
+        dirname = 'model_'+timestamp.replace(' ','_')
     else:
         pass
     if not os.path.exists(dirname):
@@ -167,6 +170,18 @@ def save_model(obj,dirname='default'):
         
     filename = dirname + '/model.pkl'   
     joblib.dump(obj,filename)  
+
+    if (X is not None):
+        filename = dirname + '/X_data.pkl'
+        joblib.dump(X,filename)
+    else:
+        pass
+
+    if (y is not None):
+        filename = dirname + '/y_data.pkl'
+        joblib.dump(y,filename)
+    else:
+        pass
 
     return
 
@@ -182,11 +197,22 @@ def read_model(file_dir):
     
     Returns
     ------
-    obj: object
+    obj: model object
+    X : predictor matrix (if it exists) otherwise None
+    y : response vector (if it exists) otherwise None
     
     """
     filename = file_dir + '/model.pkl'
     obj = joblib.load(filename) 
 
-    return obj
+    try:
+        X = joblib.load(file_dir + '/X_data.pkl')
+    except:
+        X = None
+    try:
+        y = joblib.load(file_dir + '/y_data.pkl')
+    except:
+        y = None
+    
+    return obj, X, y
 
