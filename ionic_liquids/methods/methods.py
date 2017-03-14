@@ -33,7 +33,6 @@ def do_svr(X,y):
 
 
 def do_MLP_regressor(X,y):
-<<<<<<< HEAD
  	'''
 	Call the MLP Regressor, 
 	Fit the weight on the training set
@@ -79,54 +78,6 @@ def do_MLP_classifier(X,y):
 	grid_search.fit(X_train,y_train)
 
 	return grid_search
-=======
-    """
-    Call the MLP Regressor, 
-    Fit the weight on the training set
-    
-    Input
-    ------
-    X: dataframe, n*m, n is number of data points, 
-        m is number of features
-    y: experimental electrical conductivity
-    
-    Returns
-    ------
-    grid_search: objective, the regressor objective 
-    """    
-    alphas = np.array([5,2,5,1.5,1,0.1,0.01,0.001,0.0001,0])
-    mlp_regr = MLPRegressor(hidden_layer_sizes=(100,), activation='relu',
-        solver='adam', alpha=0.0001, max_iter=5000, random_state=None,learning_rate_init=0.01)
-    grid_search = GridSearchCV(mlp_regr, param_grid=dict(alpha=alphas))
-    grid_search.fit(X,y)
-    return grid_search
-
-
-def do_MLP_classifier(X,y):
-    """
-    Call the MLP Classifier, 
-    Fit the weight on the training set
-    
-    Input
-    ------
-    X: dataframe, n*m, n is number of data points, 
-        m is number of features
-    y: experimental electrical conductivity
-    
-    Returns
-    ------
-    grid_search: objective, the regressor objective 
-    """
-    
-    alphas = np.array([5,2,5,1.5,1,0.1,0.01,0.001,0.0001,0])
-    mlp_class = MLPClassifier(hidden_layer_sizes=(100,), activation='relu', 
-        solver='adam', alpha=0.0001, max_iter=5000, random_state=None,learning_rate_init=0.01)
-    grid_search = GridSearchCV(mlp_class, param_grid=dict(alpha=alphas))
-    grid_search.fit(X_train,y_train)
-    
-    return grid_search
->>>>>>> 3ec86156fed66bc331a5db267fa5711a4432d40a
-
 
 def do_lasso(X,y): 
     """
