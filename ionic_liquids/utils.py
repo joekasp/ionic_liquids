@@ -45,13 +45,13 @@ def train_model(model,data_file,test_percent,save=True):
     X_train, X_test, y_train, y_test  = train_test_split(X,y,test_size=(test_percent/100))
     
     #print("training model is ",model)
-    if (model == 'LASSO'):
+    if (model.lower() == 'lasso'):
         obj = methods.do_lasso(X_train,y_train)
-    elif (model == 'MLP Regressor'):
+    elif (model.lower() == 'mlp_regressor'):
         obj = methods.do_MLP_regressor(X_train,y_train)
-    elif (model == 'MLP Classifier'):
+    elif (model.lower() == 'mlp_classifier'):
         obj = methods.do_MLP_classifier(X_train,y_train)
-    elif (model == 'SVR'):
+    elif (model.lower() == 'svr'):
         obj = methods.do_svr(X_train,y_train)
     else:
         raise ValueError('Invalid model type!') 
@@ -158,12 +158,12 @@ def save_model(obj,model_type,filename='default'):
     """
     
     items = []
-    if (model_type == 'lasso'):
+    if (model_type.lower() == 'lasso'):
         items.append(obj.coef_)
         items.append(obj.sparse_coef_)
         items.append(obj.intercept_)
         items.append(obj.n_iter_)
-    elif (model_type == 'mlp_reg'):
+    elif (model_type.lower() == 'mlp_regressor'):
         items.append(obj.loss_)
         items.append(obj.coefs_)
         items.append(obj.intercepts_)
@@ -171,7 +171,7 @@ def save_model(obj,model_type,filename='default'):
         items.append(obj.n_layers_)
         items.append(obj.n_outputs_)
         items.append(obj.out_activation_)
-    elif (model_type == 'mlp_clas'):
+    elif (model_type.lower() == 'mlp_classifier'):
         items.append(obj.classes_)
         items.append(obj.loss_)
         items.append(obj.coefs_)
@@ -180,7 +180,7 @@ def save_model(obj,model_type,filename='default'):
         items.append(obj.n_layers_)
         items.append(obj.n_outputs_)
         items.append(obj.out_activation_)
-    elif (model_type == 'svr'):
+    elif (model_typel.lower() == 'svr'):
         items.append(obj.support_)
         items.append(obj.support_vectors_)
         items.append(obj.dual_coef_)
