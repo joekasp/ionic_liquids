@@ -5,6 +5,7 @@
 - There should be two input data, one is the feature data, one is the target value data.
 
 - The input feature data set will have the following columns:
+
 `SMILES_A | SMILES_B | Mol_ratio_A | Tempurature |Pressure`
 
 - The rdkit functions will convert the SMILES string of A and B molecules to the corresponding molecular descriptor (black boxed in this code) and passing the resulting dataframe to the regression model.
