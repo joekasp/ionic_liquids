@@ -1,24 +1,26 @@
-#import packages
+#default python modules
+import os
+from datetime import datetime
+#external packages
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.externals import joblib
+from sklearn.linear_model import Lasso
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
-from sklearn.model_selection import GridSearchCV
-from sklearn.linear_model import Lasso
 from rdkit import Chem
 from rdkit.Chem import AllChem, Descriptors
-from sklearn.model_selection import train_test_split
 from rdkit.ML.Descriptors.MoleculeDescriptors import MolecularDescriptorCalculator as Calculator
+#internal modules
 from methods import methods
 
 
 def errors(y_test,y_prediction):
     '''Generate the prediction error'''
     difference = y_prediction - y_test
-    j
     return difference
 
 
@@ -38,12 +40,12 @@ def train_model(model,data_file,test_percent,save=True):
     X: dataframe, normlized input feature
     y: targeted electrical conductivity
     
-    """
-    
+    """    
     df = read_data(data_file)
     X,y = molecular_descriptors(df)
     X_train, X_test, y_train, y_test  = train_test_split(X,y,test_size=(test_percent/100))
     
+    model = model.replace(' ','_')
     #print("training model is ",model)
     if (model.lower() == 'lasso'):
         obj = methods.do_lasso(X_train,y_train)
@@ -143,89 +145,48 @@ def read_data(filename):
     return df
 
 
-def save_model(obj,model_type,filename='default'):
+def save_model(obj,dirname='default'):
     """
     Save the trained regressor model to the file
     
     Input
     ------
-    obj: objective, the regressor objective
-    model_type: string, the name of the model
-    
+    obj: object
+    dirname : the directory to save contents  
+ 
     Returns
     ------
     None
     """
-    
-    items = []
-    if (model_type.lower() == 'lasso'):
-        items.append(obj.coef_)
-        items.append(obj.sparse_coef_)
-        items.append(obj.intercept_)
-        items.append(obj.n_iter_)
-    elif (model_type.lower() == 'mlp_regressor'):
-        items.append(obj.loss_)
-        items.append(obj.coefs_)
-        items.append(obj.intercepts_)
-        items.append(obj.n_iter_)
-        items.append(obj.n_layers_)
-        items.append(obj.n_outputs_)
-        items.append(obj.out_activation_)
-    elif (model_type.lower() == 'mlp_classifier'):
-        items.append(obj.classes_)
-        items.append(obj.loss_)
-        items.append(obj.coefs_)
-        items.append(obj.intercepts_)
-        items.append(obj.n_iter_)
-        items.append(obj.n_layers_)
-        items.append(obj.n_outputs_)
-        items.append(obj.out_activation_)
-    elif (model_typel.lower() == 'svr'):
-        items.append(obj.support_)
-        items.append(obj.support_vectors_)
-        items.append(obj.dual_coef_)
-        items.append(obj.coef_)
-        items.append(obj.intercept_)
-        items.append(obj.sample_weight_)
+    if (dirname == 'default'):
+        dirname = 'model'+str(datetime.now())
     else:
-        raise ValueError('Invalid model type!')
-    
-    if (filename == 'default'):
-        filename = 'model_' + model_type + '.txt'
-    
-    f = open(filename,'w')
-    f.write(model_type + '\n')
-    for item in items:
-        f.write(str(item))
-        f.write('\n')
-    f.close()
-    
+        pass
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+        
+    filename = dirname + '/model.pkl'   
+    joblib.dump(obj,filename)  
+
     return
 
 
-def read_model(filename,model_type):
+def read_model(file_dir):
     """
     Read the trained regressor to 
     avoid repeating training.
     
     Input
     ------
-    model_type: string, the name of the regression model
+    file_dir : the directory containing all model info
     
     Returns
     ------
-    obj: objective, the regressor objective
+    obj: object
     
     """
-    if (model_type == 'lasso'):
-        obj = Lasso
-    elif (model_type == 'mlp_reg'):
-        obj = MLPRegressor
-    elif (model_type == 'mlp_clas'):
-        obj = MLPClassifier
-    elif (model_type == 'svr'):
-        obj = SVR
-    else:
-        raise ValueError('Invalid model type!')
+    filename = file_dir + '/model.pkl'
+    obj = joblib.load(filename) 
+
     return obj
 
