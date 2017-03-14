@@ -11,8 +11,7 @@ filename = 'datasets/inputdata.xlsx'
 #get X matrix and response vector y (need a function for this) 
 df = utils.read_data(filename) 
 train, test = train_test_split(data_scaled, Y, test_size=0.1)
-X_train,y_train = utils.molecular_descriptors(train)
-X_test,y_test = utils.molecular_descriptors(test)
+X_train,y_train,X_test,y_test = utils.molecular_descriptors(df)
 
 #do machine_learning call
 #MLP_Regr = MLP_regressor(molecular_descriptors, conductivity)
