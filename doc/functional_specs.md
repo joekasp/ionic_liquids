@@ -10,9 +10,11 @@
 
 ## Installing Packages
 1. Install numpy, pandas, matplotlib, xlrd and scikit-learn
-`$ conda install numpy pandas matplotlib xlrd scikit-learn
+
+`$ conda install numpy pandas matplotlib xlrd scikit-learn`
 
 2. Install RDKit
+
 `$ conda install -c rdkit rdkit=2016.09.4`
 
 ## Data Souce
