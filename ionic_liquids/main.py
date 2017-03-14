@@ -1,31 +1,39 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 
 import utils 
-from methods import lasso
-from visualization import core
+from methods import methods
+from visualization import plots
 
-filename = 'datasets/inputdata.xlsx'
+
+
+FILENAME = 'datasets/inputdata.xlsx'
+MODEL = 'lasso'
 
 #get X matrix and response vector y (need a function for this) 
-df = utils.read_data(filename) 
-train, test = train_test_split(data_scaled, Y, test_size=0.1)
-X_train,y_train = utils.molecular_descriptors(train)
-X_test,y_test = utils.molecular_descriptors(test)
+df = utils.read_data(FILENAME) 
+X, y = utils.molecular_descriptors(df)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
 
 #do machine_learning call
-#MLP_Regr = MLP_regressor(molecular_descriptors, conductivity)
-#MLP_class = MLP_classifier(molecular_descriptors, conductivity)
-obj = lasso.do_lasso(X,y)
-#SVR = SVR(molecular_descriptors, conductivity)
+
+if (MODEL.lower() == 'mlp_regressor'): 
+    obj = methods.do_MLP_regressor(X_train, y_train)
+elif (MODEL.lower() == 'mlp_classifier'): 
+    obj = methods.do_MLP_classifier(X_train, y_train)
+elif (MODEL.lower() == 'lasso'): 
+    obj = methods.do_lasso(X_train,y_train)
+elif (MODEL.lower() == 'svr'): 
+    obj = methods.do_svr(X_train,y_train)
+else:
+    raise ValueError("Model not supported")
 
 #save model to file
-#utils.save_model(obj,model_type='lasso')
+utils.save_model(obj,model_type=MODEL)
 
 #plot
-prediction_plot = core.parity_plot(y,obj.predict(X))
-
-
+my_plot = plots.parity_plot(y,obj.predict(X))
 plt.show(my_plot)
 

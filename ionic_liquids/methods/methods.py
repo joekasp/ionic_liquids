@@ -33,52 +33,31 @@ def do_svr(X,y):
 
 
 def do_MLP_regressor(X,y):
- 	'''
-	Call the MLP Regressor, 
-	Fit the weight on the training set
-	
-	Input
-	------
-	X: dataframe, n*m, n is number of data points, 
-		m is number of features
-	y: experimental electrical conductivity
+    """
+    Call the MLP Regressor, 
+    Fit the weight on the training set
+    
+    Input
+    ------
+    X: dataframe, n*m, n is number of data points, 
+        m is number of features
+    y: experimental electrical conductivity
+    
+    Returns
+    ------
+    mlp_regr : the MLP object with the best parameters
+    """    
+    alphas = np.array([5,2,5,1.5,1,0.1,0.01,0.001,0.0001,0])
+    mlp_regr = MLPRegressor(hidden_layer_sizes=(100,), activation='relu',
+        solver='adam', alpha=0.0001, max_iter=5000, random_state=None,learning_rate_init=0.01)
+    grid_search = GridSearchCV(mlp_regr, param_grid=dict(alpha=alphas))
+    grid_search.fit(X,y)
+    
+    #print(grid_search.best_params_)
+    mlp_regr.alpha_ = grid_search.best_params_['alpha']
+    mlp_regr.fit(X,y)
 
-	Returns
-	------
-	grid_search: objective, the regressor objective 
-	'''
-
-    alphas = np.array([1,0.1,0.01,0.001,0.0001])
-	mlp_regr = MLPRegressor(hidden_layer_sizes=(100,), activation='relu',
-	    solver='adam', alpha=0.0001, max_iter=5000, random_state=None,learning_rate_init=0.01)
-	grid_search = GridSearchCV(mlp_regr, param_grid=dict(alpha=alphas))
-	grid_search.fit(X,y)
-	return grid_search
-
-
-def do_MLP_classifier(X,y):
-  	'''
-	Call the MLP Classifier, 
-	Fit the weight on the training set
-	
-	Input
-	------
-	X: dataframe, n*m, n is number of data points, 
-		m is number of features
-	y: experimental electrical conductivity
-
-	Returns
-	------
-	grid_search: objective, the regressor objective 
-	'''
-    alphas = np.array([1,0.1,0.01,0.001,0.0001])    
-	mlp_class = MLPClassifier(hidden_layer_sizes=(100,), activation='relu', 
-	    solver='adam', alpha=0.0001, max_iter=5000, random_state=None,learning_rate_init=0.01)
-	grid_search = GridSearchCV(mlp_class, param_grid=dict(alpha=alphas))
-	grid_search.fit(X_train,y_train)
-
-	return grid_search
-
+    return mlp_regr
 
 def do_MLP_classifier(X,y):
     """
@@ -123,8 +102,11 @@ def do_lasso(X,y):
     alphas = np.array([5,4,3,2,1,0.1,0.01,0.001,0.0001])
     lasso = Lasso(alpha=0.001, fit_intercept=True, normalize=False, precompute=False,
         copy_X=True, max_iter=10000, tol=0.001, positive=False, random_state=None, selection='cyclic')
-    #gs = GridSearchCV(lasso, param_grid=dict(alpha=alphas))
-    #gs.fit(X,y)
+    gs = GridSearchCV(lasso, param_grid=dict(alpha=alphas))
+    gs.fit(X,y)
+    
+    lasso.alpha_ = gs.best_params_['alpha']
+
     lasso.fit(X,y)
         
     return lasso
