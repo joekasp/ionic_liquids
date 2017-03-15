@@ -24,8 +24,6 @@ X_test, trash, trash = utils.normalization(X_test, X_mean, X_std)
 # do machine_learning call
 if (MODEL.lower() == 'mlp_regressor'):
     obj = methods.do_MLP_regressor(X_train, y_train)
-elif (MODEL.lower() == 'mlp_classifier'):
-    obj = methods.do_MLP_classifier(X_train, y_train)
 elif (MODEL.lower() == 'lasso'):
     obj = methods.do_lasso(X_train, y_train)
 elif (MODEL.lower() == 'svr'):
