@@ -61,7 +61,26 @@ def train_model(model,data_file,test_percent,save=True):
     
     return obj, X, y, X_mean, X_std
 
+
 def normalization(data,means=None,stdevs=None):
+    """
+    Normalizes the data using the means and standard
+    deviations given, calculating them otherwise.
+    Returns the means and standard deviations of columns.
+
+    Inputs
+    ------
+    data : Pandas DataFrame
+    means : optional numpy argument of column means
+    stdevs : optional numpy argument of column st. devs
+
+    Returns
+    ------
+    normed : the normalized DataFrame
+    means : the numpy row vector of column means
+    stdevs : the numpy row vector of column st. devs
+
+    """
     cols = data.columns
     data = data.values
     
