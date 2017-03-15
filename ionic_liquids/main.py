@@ -8,7 +8,7 @@ from methods import methods
 from visualization import plots
 
 
-FILENAME = 'datasets/inputdata.xlsx'
+FILENAME = 'datasets/inputdata2.xlsx'
 MODEL = 'mlp_regressor'
 DIRNAME = 'my_test'
 
