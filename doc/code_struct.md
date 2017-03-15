@@ -1,42 +1,53 @@
 # Code Structure
 ```
--ionic_liquid 
-    -ionic_liquid
-        |__init__.py
-        |version.py
-        |util.py
-        -method
-            |method.py
-            |__init__.py
-        +datasets
-        +examples
-        -visualization
-            |core.py
-            |plot.py
-            |__init__.py
+|---ionic_liquid (master)
+    |---ionic_liquid
+        |---__init__.py
+        |---version.py
+        |---main.py
+        |---util.py
+        |---datasets
+            |---compoundSMILES.xlsx
+            |---compounddata.xlsx
+        |---examples
+            |---
+        |---method
+            |---__init__.py
+            |---method.py
+        |---visualization
+            |---__init__.py
+            |---core.py
+            |---plot.py
+        |---test
+            |---test_method.py
+            |---test_utils.py
         |Interface.ipynb
-    -doc
-        |functional_spec.md
-        |code_struct.md (current)
-    |README.md
-    |LICENSE
-    |setup.py
+    |---doc
+        |---overview.md
+        |---functional_spec.md
+        |---code_struct.md
+        |---tutorial.md
+        |---runcell.png
+        |---model_train.png
+        |---model_read.png
+    |---README.md
+    |---LICENSE
+    |---setup.py
 ```
 
-## Code Content
+## Directory Summary
+- `datasets` contains the downloaded ionic liquids data
 
-### `ionic_liquid/util.py`
-Containing the data cleaning function, regression model selection function.
+- `methods` contains the regression model used in this work
 
-### `ionic_liquid/method/method.py`
-Containing the regression model objective.
+- `visualization` contains the plot function 
 
-### `ionic_liquid/visualization/core.py`
-Containing the regression model choose function.
+- `test` is the folder for unit test
 
-### `ionic_liquid/visualization/plot.py`
-Containing the parity plot function and error plot function.
+- `Interface.ipynb` is a portable entrance of the interface widgets.
 
-### `ionic_liquid/Interface.ipynb`
-Containing the GUI of the interaction widget.
+- `doc` contains documents
+
+- `LICENSE` MIT license
+
 

@@ -25,7 +25,8 @@ file for more information.
         |---main.py
         |---util.py
         |---datasets
-            |---
+            |---compoundSMILES.xlsx
+            |---compounddata.xlsx
         |---examples
             |---
         |---method
@@ -51,5 +52,20 @@ file for more information.
     |---LICENSE
     |---setup.py
 ```
+## Directory Summary
+- `datasets` contains the downloaded ionic liquids data.
+
+- `methods` contains the regression model used in this work.
+
+- `visualization` contains the plot function.
+
+- `test` is the folder for unit test.
+
+- `Interface.ipynb` is a portable entrance of the interface widgets.
+
+- `doc` contains documents, *tutorial* is also available in this directory.
+
+- `LICENSE` MIT license
+
 
 
