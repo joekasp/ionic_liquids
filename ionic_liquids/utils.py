@@ -82,19 +82,32 @@ def normalization(data,means=None,stdevs=None):
 
     """
     cols = data.columns
-    data = data.values
-    
+    data = data.values   
+   
     if (means is None) or (stdevs is None):
         means = np.mean(data,axis=0)
         stdevs = np.std(data,axis=0,ddof=1)
-    for i in range(data.shape[1]):
-        data[:,i] = (data[:,i] - means[i]) / stdevs[i]
+    else:
+        means = np.array(means)
+        stdevs = np.array(stdevs)
+  
+    #print('Data Shape:',data.shape)
+    #print('Means Shape:',means.shape)
+    #print('StDev Shape:',stdevs.shape)
+    
+    #handle special case of one row
+    if (len(data.shape) == 1) or (data.shape[0] == 1):
+        for i in range(len(data)):
+            data[i] = (data[i] - means[i]) / stdevs[i]
+    else: 
+        for i in range(data.shape[1]):
+            data[:,i] = (data[:,i] - means[i]*np.ones(data.shape[1])) / stdevs[i]
     
     normed = pd.DataFrame(data,columns=cols)
     return normed, means, stdevs
     
 
-def predict_model(A_smile,B_smile,obj,t,p,X_mean,X_stdev):
+def predict_model(A_smile,B_smile,obj,t,p,m,X_mean,X_stdev,flag=None):
     """
     Generates the predicted model data for a mixture
     of compounds A and B at temperature t and pressure p.
@@ -106,26 +119,40 @@ def predict_model(A_smile,B_smile,obj,t,p,X_mean,X_stdev):
     obj : model object
     t : float of temperature
     p : float of pressure
+    m : float of mol_fraction
     X_mean : means of columns for normalization
     X_stdev : stdevs fo columns for normalization
+    flag : string to designate which variable is on x-axis
 
     Returns
     ------
-    x_conc : concentration (x-values)
+    x_vals : x-values chosen by flag
     y_pred : predicted conductivity (y_values)
 
     """
     N = 100 #number of points
 
-    x_conc = np.linspace(0,1,N+1)
     y_pred = np.empty(N+1)
+    if (flag == 'm'):
+        x_conc = np.linspace(0,1,N+1)
+    elif (flag == 't'):
+        x_conc = np.linspace(100,400,N+1)
+    elif (flag == 'p'):
+        x_conc = np.linspace(5,400,N+1)
+    else:
+        raise ValueError("unexpected flag")
     for i in range(len(x_conc)):
-        my_df = pd.DataFrame({'A':A_smile,'B':B_smile,'MOLFRC_A':x_conc[i],'P':p,'T':t,'EC_value':0},index=[0])
+        if (flag == 'm'):
+            my_df = pd.DataFrame({'A':A_smile,'B':B_smile,'MOLFRC_A':x_conc[i],'P':p,'T':t,'EC_value':0},index=[0])
+        elif (flag == 't'):
+            my_df = pd.DataFrame({'A':A_smile,'B':B_smile,'MOLFRC_A':m,'P':p,'T':x_conc[i],'EC_value':0},index=[0])
+        elif (flag == 'p'):
+            my_df = pd.DataFrame({'A':A_smile,'B':B_smile,'MOLFRC_A':m,'P':x_conc[i],'T':t,'EC_value':0},index=[0])
+            
         X,trash = molecular_descriptors(my_df)
         X,trash,trash = normalization(X,X_mean,X_stdev)
         y_pred[i] = obj.predict(X)
-        
-
+    
     return x_conc,y_pred
    
 
