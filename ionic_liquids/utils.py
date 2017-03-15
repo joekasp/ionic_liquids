@@ -43,8 +43,8 @@ def train_model(model,data_file,test_percent,save=True):
     """    
     df = read_data(data_file)
     X,y = molecular_descriptors(df)
-    X, X_mean, X_std = normalization(X)
     X_train, X_test, y_train, y_test  = train_test_split(X,y,test_size=(test_percent/100))
+    X_train, X_mean, X_std = normalization(X_train)
     
     model = model.replace(' ','_')
     #print("training model is ",model)
@@ -59,7 +59,7 @@ def train_model(model,data_file,test_percent,save=True):
     else:
         raise ValueError('Invalid model type!') 
     
-    return obj, X, y, X_mean, X_std
+    return obj, X_train, y_train, X_mean, X_std
 
 
 def normalization(data,means=None,stdevs=None):
@@ -101,7 +101,7 @@ def normalization(data,means=None,stdevs=None):
             data[i] = (data[i] - means[i]) / stdevs[i]
     else: 
         for i in range(data.shape[1]):
-            data[:,i] = (data[:,i] - means[i]*np.ones(data.shape[1])) / stdevs[i]
+            data[:,i] = (data[:,i] - means[i]*np.ones(data.shape[0])) / stdevs[i]
     
     normed = pd.DataFrame(data,columns=cols)
     return normed, means, stdevs
