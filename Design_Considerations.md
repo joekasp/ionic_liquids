@@ -4,15 +4,17 @@ The main idea of this project is to design a machine learning framework to take 
 # Work flow
 
 #### 1. Date collection and cleaning
-Collect data from ILthermo, catenate different data into one csv file which is ready for machine learning.
+1. Hand collect the data of binary compounds and their components from ILthermo 
+2. Gather the SMILES for the cation and anion of the binary compounds. 
+3. Catenate different data into one csv file which is ready for machine learning.
+
 #### 2. Descriptors generation
-1. Find SMILES string of all the cations and anions in the binary system.
-2. Feed the SMILES string into RDkit and generate molecular discriptors for machine learning.
-3. The final data set should be a N * M data sheet, where N is number of data points, and M is the dimension of features or number of discriptors.
-4. Data can be split into testing, training, validation data.
+1. Feed the SMILES string into RDkit and generate molecular discriptors for machine learning.
+2. The final data set should be a N * M data sheet, where N is number of data points, and M is the dimension of features or number of discriptors.
+3. Data can be split into testing, training, validation data.
 
 #### 3. Machine Learning
-Use neural network from scikit learn or tensor flow 
+Use neural network from scikit learn. 
 
 #### 4. Visualization
 

@@ -1,24 +1,26 @@
-#import packages
+#default python modules
+import os
+from datetime import datetime
+#external packages
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.externals import joblib
+from sklearn.linear_model import Lasso
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
-from sklearn.model_selection import GridSearchCV
-from sklearn.linear_model import Lasso
 from rdkit import Chem
 from rdkit.Chem import AllChem, Descriptors
-from sklearn.model_selection import train_test_split
 from rdkit.ML.Descriptors.MoleculeDescriptors import MolecularDescriptorCalculator as Calculator
+#internal modules
 from methods import methods
 
 
 def errors(y_test,y_prediction):
     '''Generate the prediction error'''
     difference = y_prediction - y_test
-    j
     return difference
 
 
@@ -38,25 +40,57 @@ def train_model(model,data_file,test_percent,save=True):
     X: dataframe, normlized input feature
     y: targeted electrical conductivity
     
-    """
-    
+    """    
     df = read_data(data_file)
     X,y = molecular_descriptors(df)
     X_train, X_test, y_train, y_test  = train_test_split(X,y,test_size=(test_percent/100))
     
+    model = model.replace(' ','_')
     #print("training model is ",model)
-    if (model == 'LASSO'):
+    if (model.lower() == 'lasso'):
         obj = methods.do_lasso(X_train,y_train)
-    elif (model == 'MLP Regressor'):
+    elif (model.lower() == 'mlp_regressor'):
         obj = methods.do_MLP_regressor(X_train,y_train)
-    elif (model == 'MLP Classifier'):
+    elif (model.lower() == 'mlp_classifier'):
         obj = methods.do_MLP_classifier(X_train,y_train)
-    elif (model == 'SVR'):
+    elif (model.lower() == 'svr'):
         obj = methods.do_svr(X_train,y_train)
     else:
         raise ValueError('Invalid model type!') 
     
     return obj, X, y
+
+
+def predict_model(A_smile,B_smile,obj,t,p):
+    """
+    Generates the predicted model data for a mixture
+    of compounds A and B at temperature t and pressure p.
+
+    Inputs
+    -----
+    A_smile : SMILES string for compound A
+    B_smile : SMILES string for compound B
+    obj : model object
+    t : float of temperature
+    p : float of pressure
+
+    Returns
+    ------
+    x_conc : concentration (x-values)
+    y_pred : predicted conductivity (y_values)
+
+    """
+    N = 100 #number of points
+
+    x_conc = np.linspace(0,1,N+1)
+    y_pred = np.empty(N+1)
+    for i in range(len(x_conc)):
+        my_df = pd.DataFrame({'A':A_smile,'B':B_smile,'MOLFRC_A':x_conc[i],'P':p,'T':t,'EC_value':0},index=[0])
+        X,trash = molecular_descriptors(my_df) 
+        y_pred[i] = obj.predict(X)
+
+    return x_conc,y_pred
+   
 
 
 def molecular_descriptors(data):
@@ -143,89 +177,74 @@ def read_data(filename):
     return df
 
 
-def save_model(obj,model_type,filename='default'):
+def save_model(obj,X=None,y=None,dirname='default'):
     """
     Save the trained regressor model to the file
     
     Input
     ------
-    obj: objective, the regressor objective
-    model_type: string, the name of the model
-    
+    obj: model object
+    X : Predictor matrix
+    y : Response vector
+    dirname : the directory to save contents  
+ 
     Returns
     ------
     None
     """
-    
-    items = []
-    if (model_type == 'lasso'):
-        items.append(obj.coef_)
-        items.append(obj.sparse_coef_)
-        items.append(obj.intercept_)
-        items.append(obj.n_iter_)
-    elif (model_type == 'mlp_reg'):
-        items.append(obj.loss_)
-        items.append(obj.coefs_)
-        items.append(obj.intercepts_)
-        items.append(obj.n_iter_)
-        items.append(obj.n_layers_)
-        items.append(obj.n_outputs_)
-        items.append(obj.out_activation_)
-    elif (model_type == 'mlp_clas'):
-        items.append(obj.classes_)
-        items.append(obj.loss_)
-        items.append(obj.coefs_)
-        items.append(obj.intercepts_)
-        items.append(obj.n_iter_)
-        items.append(obj.n_layers_)
-        items.append(obj.n_outputs_)
-        items.append(obj.out_activation_)
-    elif (model_type == 'svr'):
-        items.append(obj.support_)
-        items.append(obj.support_vectors_)
-        items.append(obj.dual_coef_)
-        items.append(obj.coef_)
-        items.append(obj.intercept_)
-        items.append(obj.sample_weight_)
+    if (dirname == 'default'):
+        timestamp = str(datetime.now())[:19]
+        dirname = 'model_'+timestamp.replace(' ','_')
     else:
-        raise ValueError('Invalid model type!')
-    
-    if (filename == 'default'):
-        filename = 'model_' + model_type + '.txt'
-    
-    f = open(filename,'w')
-    f.write(model_type + '\n')
-    for item in items:
-        f.write(str(item))
-        f.write('\n')
-    f.close()
-    
+        pass
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+        
+    filename = dirname + '/model.pkl'   
+    joblib.dump(obj,filename)  
+
+    if (X is not None):
+        filename = dirname + '/X_data.pkl'
+        joblib.dump(X,filename)
+    else:
+        pass
+
+    if (y is not None):
+        filename = dirname + '/y_data.pkl'
+        joblib.dump(y,filename)
+    else:
+        pass
+
     return
 
 
-def read_model(filename,model_type):
+def read_model(file_dir):
     """
     Read the trained regressor to 
     avoid repeating training.
     
     Input
     ------
-    model_type: string, the name of the regression model
+    file_dir : the directory containing all model info
     
     Returns
     ------
-    obj: objective, the regressor objective
+    obj: model object
+    X : predictor matrix (if it exists) otherwise None
+    y : response vector (if it exists) otherwise None
     
     """
-    if (model_type == 'lasso'):
-        obj = Lasso
-    elif (model_type == 'mlp_reg'):
-        obj = MLPRegressor
-    elif (model_type == 'mlp_clas'):
-        obj = MLPClassifier
-    elif (model_type == 'svr'):
-        obj = SVR
-    else:
-        raise ValueError('Invalid model type!')
-    return obj
+    filename = file_dir + '/model.pkl'
+    obj = joblib.load(filename) 
+
+    try:
+        X = joblib.load(file_dir + '/X_data.pkl')
+    except:
+        X = None
+    try:
+        y = joblib.load(file_dir + '/y_data.pkl')
+    except:
+        y = None
+    
+    return obj, X, y
 

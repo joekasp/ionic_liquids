@@ -6,6 +6,42 @@ def model_types():
     models=['MLP Regressor','MLP Classifier','LASSO','SVR']
     return models
 
+def read_SMILES():
+    """
+    Reads compound names and SMILES from file
+
+    Inputs
+    -----
+    None
+
+
+    Returns
+    ------
+    A_list : names of 'A' compounds
+    A_smiles : SMILES of corresponding 'A' compounds
+    B_list : names of 'B' compounds
+    B_smiles : SMILES of corresponding 'B' compounds
+
+    """
+
+    df = pd.read_excel('datasets/compoundSMILES.xlsx')
+    A_list = []
+    A_smiles = []
+    B_list = []
+    B_smiles = []
+
+    #remove duplicates
+    for row in df.itertuples():
+        if row[1] not in A_list:
+            A_list.append(row[1])
+            A_smiles.append(row[2])
+        if row[3] not in B_list:
+            B_list.append(row[3])
+            B_smiles.append(row[4])
+        
+
+    return A_list, A_smiles, B_list, B_smiles
+
 def scatter_plot(X,Y):
     """
     Draws a scatter plot of data
@@ -22,29 +58,5 @@ def scatter_plot(X,Y):
     """
     pass
 
-
-def predict_model():
-    print("prediction")
-    
-def parity_plot(y_act,y_pred):
-    """
-    Creates a parity plot
-
-    Input
-    -----
-    y_act : numpy array of 'true' (actual) values
-    y_pred : numpy array of predicted values from the model 
-
-    Output
-    ------
-    fig : matplotlib figure
-
-    """
-
-    fig = plt.figure(figsize=(4,4))
-    plt.scatter(y_act.values.astype(np.float),y_pred)
-    plt.plot([y_act.min(),y_act.max()],[y_act.min(),y_act.max()],lw=4,c='r')
-    plt.xlabel('Actual')
-    plt.ylabel('Predicted')
-    return fig
-
+   
+ 
