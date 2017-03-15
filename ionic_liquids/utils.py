@@ -63,10 +63,11 @@ def train_model(model,data_file,test_percent,save=True):
 
 def normalization(data,mean,std):
     if mean == None:
-        mean = np.mean(data)
+        mean = np.mean(data,axis = 0)
     if std == None:
-        std = np.std(data)
-    data = (data - mean) / std
+        std = np.std(data, axis = 0)
+    for column in data:
+        data[column] = (data[column]-np.mean(data[column]))/np.std(data[column])
     return data, mean, std
     
 
