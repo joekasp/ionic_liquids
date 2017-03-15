@@ -43,7 +43,7 @@ def train_model(model,data_file,test_percent,save=True):
     """    
     df = read_data(data_file)
     X,y = molecular_descriptors(df)
-    X, X_mean, X_std = normalization(X, mean = None, std = None)
+    X, X_mean, X_std = normalization(X)
     X_train, X_test, y_train, y_test  = train_test_split(X,y,test_size=(test_percent/100))
     
     model = model.replace(' ','_')
@@ -61,16 +61,21 @@ def train_model(model,data_file,test_percent,save=True):
     
     return obj, X, y, X_mean, X_std
 
-def normalization(data,mean,std):
-    if mean == None:
-        mean = np.mean(data)
-    if std == None:
-        std = np.std(data)
-    data = (data - mean) / std
-    return data, mean, std
+def normalization(data,means=None,stdevs=None):
+    cols = data.columns
+    data = data.values
+    
+    if (means is None) or (stdevs is None):
+        means = np.mean(data,axis=0)
+        stdevs = np.std(data,axis=0,ddof=1)
+    for i in range(data.shape[1]):
+        data[:,i] = (data[:,i] - means[i]) / stdevs[i]
+    
+    normed = pd.DataFrame(data,columns=cols)
+    return normed, means, stdevs
     
 
-def predict_model(A_smile,B_smile,obj,t,p):
+def predict_model(A_smile,B_smile,obj,t,p,X_mean,X_stdev):
     """
     Generates the predicted model data for a mixture
     of compounds A and B at temperature t and pressure p.
@@ -82,6 +87,8 @@ def predict_model(A_smile,B_smile,obj,t,p):
     obj : model object
     t : float of temperature
     p : float of pressure
+    X_mean : means of columns for normalization
+    X_stdev : stdevs fo columns for normalization
 
     Returns
     ------
@@ -95,10 +102,8 @@ def predict_model(A_smile,B_smile,obj,t,p):
     y_pred = np.empty(N+1)
     for i in range(len(x_conc)):
         my_df = pd.DataFrame({'A':A_smile,'B':B_smile,'MOLFRC_A':x_conc[i],'P':p,'T':t,'EC_value':0},index=[0])
-        
         X,trash = molecular_descriptors(my_df)
-        #X,mean,std = normalization(X,mean = obj.mean,)
-        print(X)
+        X,trash,trash = normalization(X,X_mean,X_stdev)
         y_pred[i] = obj.predict(X)
         
 
@@ -116,7 +121,7 @@ def molecular_descriptors(data):
     
     Returns
     ------
-    norm_X: normalized input features
+    prenorm_X: normalized input features
     Y: experimental electrical conductivity
     
     """
@@ -137,7 +142,6 @@ def molecular_descriptors(data):
     X[:,-3] = data['T']
     X[:,-2] = data['P']
     X[:,-1] = data['MOLFRC_A']
-    print(X)
     for i in range(n):
         A = Chem.MolFromSmiles(data['A'][i])
         B = Chem.MolFromSmiles(data['B'][i])
@@ -155,11 +159,11 @@ def molecular_descriptors(data):
         'NumSaturatedRings_B', 
         'NumAliphaticRings_B',
         'T', 'P', 'MOLFRC_A'])
-    # Normalize all the input feature
-    norm_X = StandardScaler().fit_transform(prenorm_X)
-    print(norm_X)
+    
+    prenorm_X = prenorm_X.drop('NumAliphaticRings_A',1) 
+    prenorm_X = prenorm_X.drop('NumAliphaticRings_B',1)   
 
-    return norm_X, Y
+    return prenorm_X, Y
 
 
 def read_data(filename):
@@ -187,17 +191,21 @@ def read_data(filename):
 
     #clean the data if necessary
     df['EC_value'], df['EC_error'] = zip(*df['ELE_COD'].map(lambda x: x.split('±')))
-
+    df = df.drop('EC_error',1)
+    df = df.drop('ELE_COD',1)
+ 
     return df
 
 
-def save_model(obj,X=None,y=None,dirname='default'):
+def save_model(obj,X_mean,X_stdev,X=None,y=None,dirname='default'):
     """
     Save the trained regressor model to the file
     
     Input
     ------
     obj: model object
+    X_mean : mean for each column of training X
+    X_stdev : stdev for each column of training X
     X : Predictor matrix
     y : Response vector
     dirname : the directory to save contents  
@@ -216,6 +224,9 @@ def save_model(obj,X=None,y=None,dirname='default'):
         
     filename = dirname + '/model.pkl'   
     joblib.dump(obj,filename)  
+
+    joblib.dump(X_mean,dirname+'/X_mean.pkl')
+    joblib.dump(X_stdev,dirname+'/X_stdev.pkl')
 
     if (X is not None):
         filename = dirname + '/X_data.pkl'
@@ -244,12 +255,16 @@ def read_model(file_dir):
     Returns
     ------
     obj: model object
+    X_mean : mean of columns in training X
+    X_stdev : stdev of columns in training X
     X : predictor matrix (if it exists) otherwise None
     y : response vector (if it exists) otherwise None
     
     """
     filename = file_dir + '/model.pkl'
     obj = joblib.load(filename) 
+    X_mean = joblib.load(file_dir+'/X_mean.pkl')
+    X_stdev = joblib.load(file_dir+'/X_stdev.pkl')
 
     try:
         X = joblib.load(file_dir + '/X_data.pkl')
@@ -260,5 +275,5 @@ def read_model(file_dir):
     except:
         y = None
     
-    return obj, X, y
+    return obj, X_mean, X_stdev, X, y
 
