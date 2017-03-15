@@ -16,5 +16,40 @@ it is a permissive free software license that
 has excellent compatibility with other licenses. See the LICENSE
 file for more information.
 
-## Installaion
+## Code Structure
+```
+|---ionic_liquid (master)
+    |---ionic_liquid
+        |---__init__.py
+        |---version.py
+        |---main.py
+        |---util.py
+        |---datasets
+            |---
+        |---examples
+            |---
+        |---method
+            |---__init__.py
+            |---method.py
+        |---visualization
+            |---__init__.py
+            |---core.py
+            |---plot.py
+        |---test
+            |---test_method.py
+            |---test_utils.py
+        |Interface.ipynb
+    |---doc
+        |---overview.md
+        |---functional_spec.md
+        |---code_struct.md
+        |---tutorial.md
+        |---runcell.png
+        |---model_train.png
+        |---model_read.png
+    |---README.md
+    |---LICENSE
+    |---setup.py
+```
+
 
