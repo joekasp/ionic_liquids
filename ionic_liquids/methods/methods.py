@@ -3,10 +3,8 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import Lasso
-from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVR
 
-from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPRegressor
 
 def do_svr(X,y):
