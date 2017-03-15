@@ -11,9 +11,9 @@ from visualization import plots
 FILENAME = 'datasets/inputdata.xlsx'
 MODEL = 'lasso'
 
-#get X matrix and response vector y (need a function for this) 
+#get X matrix and response vector y  
 
-df = utils.read_data(filename) 
+df = utils.read_data(FILENAME) 
 train, test = train_test_split(data_scaled, Y, test_size=0.1)
 X_train,y_train,X_test,y_test = utils.molecular_descriptors(df)
 
