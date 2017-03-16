@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 def model_types():
-    models = ['MLP Regressor', 'MLP Classifier', 'LASSO', 'SVR']
+    models = ['MLP Regressor', 'LASSO', 'SVR']
     return models
 
 
