@@ -10,7 +10,7 @@
             |---compoundSMILES.xlsx
             |---compounddata.xlsx
         |---examples
-            |---
+            |---Example_Workflow.ipynb
         |---method
             |---__init__.py
             |---method.py
@@ -19,6 +19,7 @@
             |---core.py
             |---plot.py
         |---test
+            |---test_utils.py
             |---test_method.py
             |---test_utils.py
         |Interface.ipynb

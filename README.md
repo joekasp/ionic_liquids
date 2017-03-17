@@ -28,7 +28,7 @@ file for more information.
             |---compoundSMILES.xlsx
             |---compounddata.xlsx
         |---examples
-            |---
+            |---Example_Workflow.ipynb
         |---method
             |---__init__.py
             |---method.py
