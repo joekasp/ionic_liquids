@@ -37,6 +37,7 @@ file for more information.
             |---core.py
             |---plot.py
         |---test
+            |---test_utils.py
             |---test_method.py
             |---test_utils.py
         |Interface.ipynb
@@ -67,5 +68,9 @@ file for more information.
 
 - `LICENSE` MIT license
 
+## Graphic User Interface (GUI)
+![Model Training]("doc/model_train.png")
+
+![Read Model and Plot](!["doc/model_read.png"])
 
 
