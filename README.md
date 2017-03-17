@@ -69,8 +69,8 @@ file for more information.
 - `LICENSE` MIT license
 
 ## Graphic User Interface (GUI)
-![Model Training]("doc/model_train.png")
+![Model Training](doc/model_train.png)
 
-![Read Model and Plot](!["doc/model_read.png"])
+![Read Model and Plot](doc/model_read.png)
 
 
