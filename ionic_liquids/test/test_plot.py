@@ -3,6 +3,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
+from numpy import linalg as LA
 
 FIG_SIZE = (4, 4)
 
@@ -69,6 +70,92 @@ def test_train_test_error():
     plt.legend()
 
     return fig
+
+def test_error_values():
+    """
+    Creates the two predicted values
+
+    Input
+    -----
+    X_train : numpy array, the 10% of the training set data values
+    X_test : numpy array, the molecular descriptors for the testing set data values 
+
+    Y_train: numpy array, the 10% of the training set of electronic conductivity values
+    Y_test: numpy array, 'true' (actual) electronic conductivity values
+    
+    Output
+    ------
+    yh : numpy array, the prediction output for training data set
+    yh2 : numpy array, the prediction output for the testing data set 
+    """
+    X_train = np.array([[0,6,234.321,5,0,1,1,0,1,18.000,1,0,0,0,0,298.15,101,0.004],
+        [1,6,234.321,5,0,1,1,0,1,18.000,1,0,0,0,0,300.15,101,0.005],
+        [2,6,234.321,5,0,1,1,0,1,18.000,1,0,0,0,0,302.15,101,0.006],
+        [3,6,234.321,5,0,1,1,0,1,18.000,1,0,0,0,0,304.15,101,0.007],
+        [4,6,234.321,5,0,1,1,0,1,18.000,1,0,0,0,0,306.15,101,0.005]])
+    X_test = np.array([[5,6,234.321,5,0,1,1,0,1,18.000,1,0,0,0,0,300,101,0.0045],
+        [6,6,234.321,5,0,1,1,0,1,18.000,1,0,0,0,0,301,101,0.0051],
+        [7,6,234.321,5,0,1,1,0,1,18.000,1,0,0,0,0,301.5,101,0.0057]])
+    Y_train = np.array([0.02,0.03,0.03,0.04,0.05])
+    Y_test = np.array([0.03,0.04,0.05])
+    assert isinstance(X_train,np.ndarray),"The X_train should have the datatype of numpy array"
+    assert isinstance(X_test,np.ndarray),"The X_test should have the datatype of numpy array"
+    assert isinstance(Y_train,type(X_train)), "Y_train should have the same datatype as X_train"
+    assert isinstance(Y_test,type(X_test)), "Y_test should have the same datatype as X_test"
+    #setting up parameters and variables for plotting 
+    n_train = X_train.shape[0]
+    n_test = X_test.shape[0]
+    assert n_train==Y_train.shape[0],"The training data and target value should have the same dimension"
+    d = X_train.shape[1]
+    assert d==X_test.shape[1],"The training and testing data should have the same amount of feature"
+    hdnode = 100
+    w1 = np.random.normal(0,0.001,d*hdnode).reshape((d,hdnode))
+    d1 = np.zeros((d,hdnode))
+    w2 = np.random.normal(0,0.001,hdnode).reshape((hdnode,1))
+    d2 = np.zeros(hdnode)
+    h  = np.zeros(hdnode)
+    mb = 100 #minibatch size
+    m = int(n_train/mb)
+    batch = np.arange(m) 
+    lr = 0.00020
+    EP = 20000 #needed for initializing 
+    ep = 0
+    yh = np.zeros((n_train,1))
+    yh2 = np.zeros((n_test,1))
+    assert yh[0]==0, "yh has the initialization has problem "
+    assert yh2[0]==0, "yh2 has the initialization has problem "
+    L_train= np.zeros(EP+1)
+    L_test = np.zeros(EP+1)
+    Y_train = Y_train.reshape(len(Y_train),1)
+    #activation function for the hidden layer is tanh
+    
+    def g(A):
+        return (np.tanh(A))
+
+    def gd(A):
+        return (1-np.square(np.tanh(A)))
+        
+    #setting up how long the epoch will run
+    EP = 200
+    ep = 0
+    while ep < EP:
+        ep += 1
+        yh = g(X_train.dot(w1)).dot(w2)
+        yh2 = g(X_test.dot(w1)).dot(w2)
+        L_train[ep] = LA.norm(yh-Y_train.reshape(len(Y_train),1))/n_train
+        L_test[ep]  = LA.norm(yh2-Y_test.reshape(len(Y_test),1))/n_test
+        
+        np.random.shuffle(batch)
+        for i in range(m):
+            st = batch[i]*mb
+            ed = (batch[i]+1)*mb
+            h  = g(X_train[st:ed].dot(w1))
+            y = h.dot(w2)
+            d2 = h.T.dot(Y_train[st:ed]-y)
+            d1 = X_train[st:ed].T.dot(np.multiply((Y_train[st:ed]-y).dot(w2.T),gd(X_train[st:ed].dot(w1))))
+            w2 += lr*d2
+            w1 += lr*d1
+    return yh, yh2
 
 
 def test_scatter_plot():
