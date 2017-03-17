@@ -48,8 +48,6 @@ def train_model(model, data_file, test_percent, save=True):
         obj = methods.do_lasso(X_train, y_train)
     elif (model.lower() == 'mlp_regressor'):
         obj = methods.do_MLP_regressor(X_train, y_train)
-    elif (model.lower() == 'mlp_classifier'):
-        obj = methods.do_MLP_classifier(X_train, y_train)
     elif (model.lower() == 'svr'):
         obj = methods.do_svr(X_train, y_train)
     else:
@@ -232,10 +230,10 @@ def read_data(filename):
 
     # clean the data if necessary
     df['EC_value'], df['EC_error'] = zip(*df['ELE_COD'].map(lambda x: x.split('±')))
+    y_error = np.copy(df['EC_error'])
     df = df.drop('EC_error', 1)
     df = df.drop('ELE_COD', 1)
- 
-    return df
+    return df, y_error
 
 
 def save_model(obj, X_mean, X_stdev, X=None, y=None, dirname='default'):
