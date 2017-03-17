@@ -59,7 +59,7 @@ def test_train_model():
     1. X_mean is calculated
     2. X_std is calculated
     """
-    obj, X, Y, X_mean, X_std = train_model('lasso','datasets/inputdata.xlsx',0.1)
+    obj, X, Y, X_mean, X_std = train_model('lasso','datasets/compounddata.xlsx',0.1)
     assert X_mean is not None, "X mean is not calculated."
     assert X_std is not None, "X standard deviation is not calculated."
 
@@ -112,7 +112,7 @@ def test_predict_model():
     1. Shape of x_vals is right
     2. Shape of y_pred is right
     """
-    obj, X, Y, X_mean, X_std = train_model('lasso','datasets/inputdata.xlsx',0.1)
+    obj, X, Y, X_mean, X_std = train_model('lasso','datasets/compounddata.xlsx',0.1)
     X, Y = predict_model('[B-](F)(F)(F)F.CCCCCCn1cc[n+](c1)C','CO',obj,328.15,101,0.0065,X_mean,X_std,flag='m')
     assert X.shape[0] == 101, "Prediction is wrong!"
     assert Y.shape[0] == 101, "Prediction is wrong!"
@@ -134,7 +134,7 @@ def test_molecular_descriptors():
     1. Shape of prenorm_X is right
     """
     
-    df = read_data("datasets/inputdata.xlsx")
+    df = read_data("datasets/compounddata.xlsx")
     X, Y = molecular_descriptors(df)
     assert X.shape[0] == 2523, "Data shape is not right"
 
@@ -154,7 +154,7 @@ def test_read_data():
     1. Shape of df is right
 
     """
-    df = read_data("datasets/inputdata.xlsx")
+    df = read_data("datasets/compounddata.xlsx")
     assert df.shape[0] == 2523, "Data shape is not right"
 
 def test_save_model():
