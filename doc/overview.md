@@ -16,3 +16,4 @@
 
 - The output value is the prediction of the electrical conductivity.
 
+- IMPORTANT: Saving a model will produce the side effect of creating a directory (which you specify) along with the files for the model to be loaded at a later date or using the notebook interface.

@@ -36,7 +36,7 @@ def train_model(model, data_file, test_percent, save=True):
     y: targeted electrical conductivity
 
     """
-    df = read_data(data_file)
+    df, y_error = read_data(data_file)
     X, y = molecular_descriptors(df)
     X_train, X_test, y_train, y_test = \
         train_test_split(X, y, test_size=(test_percent/100))
@@ -216,6 +216,7 @@ def read_data(filename):
     Returns
     ------
     df : Pandas DataFrame
+    y_error : vector containing experimental errors
 
     """
     cols = filename.split('.')
@@ -233,6 +234,7 @@ def read_data(filename):
     y_error = np.copy(df['EC_error'])
     df = df.drop('EC_error', 1)
     df = df.drop('ELE_COD', 1)
+
     return df, y_error
 
 
