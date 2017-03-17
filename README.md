@@ -69,8 +69,10 @@ file for more information.
 - `LICENSE` MIT license
 
 ## Graphic User Interface (GUI)
+The GUI provide a handy interface to choose the data set and the size of training and testing. After training the data, the regression model can be saved for the furure usage.
 ![Model Training](doc/model_train.png)
 
+The GUI also provide a handy interface to load the regression model and predict the electrical conducitivity under different conditions.
 ![Read Model and Plot](doc/model_read.png)
 
 
